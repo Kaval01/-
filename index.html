@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>成绩计算器</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f6f9;
+            text-align: center;
+            padding-top: 50px;
+        }
+
+        .container {
+            background: white;
+            width: 300px;
+            margin: auto;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+
+        input {
+            width: 80%;
+            padding: 5px;
+            margin: 5px;
+        }
+
+        button {
+            padding: 8px 15px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        #result {
+            margin-top: 15px;
+            color: #333;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+    <h1>成绩总分计算器</h1>
+
+    <p>语文：<input type="number" id="chinese"></p>
+    <p>数学：<input type="number" id="math"></p>
+    <p>英语：<input type="number" id="english"></p>
+
+    <button onclick="calculate()">计算总分</button>
+
+    <h2 id="result"></h2>
+</div>
+
+<script>
+function calculate() {
+    let chinese = document.getElementById("chinese").value;
+    let math = document.getElementById("math").value;
+    let english = document.getElementById("english").value;
+
+    // 检查是否为空
+    if (chinese === "" || math === "" || english === "") {
+        document.getElementById("result").innerText = "请填写所有科目成绩！";
+        return;
+    }
+
+    chinese = Number(chinese);
+    math = Number(math);
+    english = Number(english);
+
+    // 检查范围
+    if (chinese < 0 || chinese > 150 ||
+        math < 0 || math > 150 ||
+        english < 0 || english > 150) {
+        document.getElementById("result").innerText = "成绩必须在 0 到 150 之间！";
+        return;
+    }
+
+    let total = chinese + math + english;
+    let average = total / 3;
+
+    let status = "";
+    if (average >= 90) {
+        status = "优秀";
+    } else if (average >= 75) {
+        status = "良好";
+    } else if (average >= 60) {
+        status = "及格";
+    } else {
+        status = "不及格";
+    }
+
+    document.getElementById("result").innerText =
+        "总分：" + total +
+        " | 平均分：" + average.toFixed(2) +
+        " | 等级：" + status;
+}
+</script>
+</body>
+</html>
