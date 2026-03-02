@@ -2,7 +2,9 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>成绩计算器</title>
+    <title>中考成绩分析工具</title>
+    <h1>中考成绩分析工具</h1>
+<p>输入成绩，自动计算总分、平均分与等级</p>
 
     <style>
         body {
@@ -43,6 +45,33 @@
         #result {
             margin-top: 15px;
             color: #333;
+
+body {
+    font-family: Arial;
+    background: linear-gradient(135deg, #1e1e2f, #2b2b45);
+    color: white;
+    text-align: center;
+    padding-top: 50px;
+}
+
+.card {
+    background: #2e2e40;
+    padding: 30px;
+    border-radius: 15px;
+    width: 300px;
+    margin: auto;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+
+button {
+    margin-top: 10px;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    background: #4cafef;
+    color: white;
+    cursor: pointer;
+}
         }
     </style>
 </head>
@@ -59,10 +88,18 @@
     <button onclick="calculate()">计算总分</button>
 
     <h2 id="result"></h2>
+    <button onclick="copyResult()">复制结果</button>
+    <div style="background:#ddd;width:100%;height:20px;border-radius:10px;margin-top:10px;">
+    <div id="progress" style="background:#4CAF50;height:20px;width:0%;border-radius:10px;"></div>
+</div>
+
+<div class="card">
+    你的原内容
 </div>
 
 <script>
 function calculate() {
+
     let chinese = document.getElementById("chinese").value;
     let math = document.getElementById("math").value;
     let english = document.getElementById("english").value;
@@ -88,6 +125,11 @@ function calculate() {
     let total = chinese + math + english;
     let average = total / 3;
 
+    let percentage = (total / 450) * 100;
+    let progress = document.getElementById("progress");
+    progress.style.transition = "width 0.8s ease";
+    progress.style.width = percentage + "%";
+
     let status = "";
     if (average >= 90) {
         status = "优秀";
@@ -98,11 +140,46 @@ function calculate() {
     } else {
         status = "不及格";
     }
+    
+    let level = "";
+
+    if (percentage >= 90) {
+        level = "A 优秀";
+    } else if (percentage >= 75) {
+        level = "B 良好";
+    } else if (percentage >= 60) {
+        level = "C 及格";
+    } else {
+        level = "D 需要努力";
+    }
+
+    let remain = 450 - total;
+
+    let predictText = "";
+
+    if (remain > 0) {
+        predictText = "\n距离满分还差：" + remain + " 分";
+    } else {
+        predictText = "\n已达到或超过满分目标！";
+    }
 
     document.getElementById("result").innerText =
-        "总分：" + total +
-        " | 平均分：" + average.toFixed(2) +
-        " | 等级：" + status;
+    "总分：" + total +
+    "\n完成度：" + percentage.toFixed(1) + "%" +
+    "\n等级：" + level +
+    predictText;
+}
+
+function copyResult() {
+    let text = document.getElementById("result").innerText;
+
+    if (text === "") {
+        alert("请先计算成绩！");
+        return;
+    }
+
+    navigator.clipboard.writeText(text);
+    alert("已复制到剪贴板！");
 }
 </script>
 </body>
